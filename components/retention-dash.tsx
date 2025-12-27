@@ -102,7 +102,7 @@ export function RetentionDashboard() {
       <div className="mb-8 text-center">
         <div className="mb-4 inline-flex items-center justify-center rounded-full bg-card/50 px-4 py-2 border border-white/5 backdrop-blur-md">
           <Sparkles className="mr-2 h-5 w-5 text-neon-pink animate-pulse" />
-          <span className="text-sm font-medium text-foreground">Algofomo Retention</span>
+          <span className="text-sm font-medium text-foreground">Whop Retention</span>
         </div>
         
         {step !== "success" && (
