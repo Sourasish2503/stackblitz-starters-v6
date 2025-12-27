@@ -65,23 +65,35 @@ export function RetentionDashboard() {
   const handleClaimOffer = async () => {
     setLoading(true);
     
-    // TODO: In Phase 3, we will call the API route here to ping Whop
-    // await fetch('/api/claim-offer', { method: 'POST', body: JSON.stringify({ membershipId }) })
+    try {
+      // 1. Call our new Secure API Route
+      const response = await fetch('/api/claim-offer', { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          membershipId, 
+          discountPercent 
+        }) 
+      })
 
-    // Simulate API delay
-    setTimeout(async () => {
-      // Log the success "Save"
-      try {
-        await addDoc(collection(db, "saves"), {
-          membershipId: membershipId,
-          discountApplied: discountPercent,
-          date: serverTimestamp()
-        });
-      } catch (e) {}
-      
+      if (!response.ok) throw new Error("Failed to apply offer")
+
+      // 2. Log the success to Firebase (For your Admin Panel)
+      await addDoc(collection(db, "saves"), {
+        membershipId: membershipId,
+        discountApplied: discountPercent,
+        date: serverTimestamp()
+      });
+
+      // 3. Show Success UI
+      setStep("success");
+
+    } catch (e) {
+      console.error("Error claiming offer:", e)
+      alert("Something went wrong applying the discount. Please contact support.")
+    } finally {
       setLoading(false);
-      setStep("success"); // 3. SHOW SUCCESS UI
-    }, 1500);
+    }
   }
 
   return (
